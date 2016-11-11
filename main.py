@@ -14,6 +14,7 @@ if __name__ == "__main__":
             courses.append([])
         elif x % 11 == 6:
             courselist[x] = crns[x // 11]
-        courses[len(courses) - 1].append(courselist[x])
+        if x % 11 != 9:
+            courses[len(courses) - 1].append(courselist[x])
     for course in courses:
         print(course)
