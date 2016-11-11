@@ -2,11 +2,6 @@ from lxml import html
 import requests
 
 
-def print_courses(courses):
-    for course in courses:
-        print(course)
-
-
 def load_subject(subject_url):
     page = requests.get(subject_url)
     tree = html.fromstring(page.content)
@@ -24,7 +19,49 @@ def load_subject(subject_url):
         elif x % 11 == 9:
             courselist[x] = capacity[x // 11]
         courses[len(courses) - 1].append(courselist[x])
+
+    for i in range(len(courses)):
+        courses[i] = course_to_dict(courses[i])
     return courses
+
+
+def print_courses(courses):
+    for course in courses:
+        print(course)
+
+
+def course_to_dict(course):
+    return {
+        'SUBJECT': course[0],
+        'COURSE': course[1],
+        'TYPE': course[2],
+        'STYLE': course[3],
+        'SECTION': course[4],
+        'TITLE': course[5],
+        'CRN': course[6],
+        'DAYS': course[7],
+        'TIMES': format_time(course[8]),
+        'CAP': course[9],
+        'PROF': course[10]
+    }
+
+def format_time(time):
+    n_time = [0, 0]
+    
+    if(time != 'TBD'):
+        n_time = [time[0:2] + time[3:5], time[11:13] + time[14:16]]
+
+        if time[6:8] == 'pm':
+            n_time[0] = int(n_time[0]) + 1200
+        else:
+            n_time[0] = int(n_time[0])
+
+        if time[17:19] == 'pm':
+            n_time[1] = int(n_time[1]) + 1200
+        else:
+            n_time[1] = int(n_time[1])
+
+    return n_time
 
 
 if __name__ == "__main__":
