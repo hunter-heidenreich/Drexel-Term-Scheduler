@@ -9,7 +9,6 @@ def load_subject(subject_url):
     courselist = tree.xpath('//tr[@class="even"]/td/text() | //tr[@class="odd"]/td/text()')
     crns = tree.xpath('//tr[@class="even"]/td/p/a/text() | //tr[@class="odd"]/td/p/a/text()')
     capacity = tree.xpath('//tr[@class="even"]/td/p/attribute::title | //tr[@class="odd"]/td/p/attribute::title')
-
     courses = []
     for x in range(len(courselist)):
         if x % 11 == 0:
@@ -22,7 +21,7 @@ def load_subject(subject_url):
 
     for i in range(len(courses)):
         courses[i] = course_to_dict(courses[i])
-    return courses
+    return remove_full(courses)
 
 
 def print_courses(courses):
@@ -47,7 +46,7 @@ def course_to_dict(course):
 
 def format_time(time):
     n_time = [0, 0]
-    
+
     if(time != 'TBD'):
         n_time = [time[0:2] + time[3:5], time[11:13] + time[14:16]]
 
@@ -64,9 +63,15 @@ def format_time(time):
     return n_time
 
 
+def remove_full(courses):
+    return [c for c in courses if c['CAP'] != 'FULL']
+
+
 if __name__ == "__main__":
-    main_url = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
-    subjects2017 = {
-        'ENGL': '&sp=SAS&sp=SENGL&sp=1'
+    winter2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDMyNToJHhmXlAaYXA0sQiEG1opmtoDgAb98cdpgAAAA%3D%3D'
+    spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
+    subjects = {
+        'ENGL': '&sp=SAS&sp=SENGL&sp=1',
+        'BUSN': '&sp=SB&sp=SBUSN&sp=1'
     }
-    print_courses(load_subject(main_url + subjects2017['ENGL']))
+    print_courses(load_subject(winter2017 + subjects['ENGL']))
