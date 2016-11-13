@@ -108,6 +108,32 @@ def remove_from_schedule(schedule):
     return schedule
 
 
+def schedule_preferences(preferences):
+    print()
+    print('Week Preferences')
+    print('[1] Early in the week')
+    print('[2] Late in the week')
+    print('[3] Middle of the week')
+    print('[4] Alternating days')
+    print('[5] Concentrate to 1-3 days of the week')
+    print('[6] No preference')
+    preferences['WEEK'] = int(input('Select option: '))
+    print()
+    print('Day Preferences')
+    print('[1] Early in the day')
+    print('[2] Late in the day')
+    print('[3] Middle of the day')
+    print('[4] Spread out classes')
+    print('[5] Concentrate classes together in the day')
+    print('[6] No preferences')
+    preferences['DAY'] = int(input('Select option: '))
+    print()
+    print('CURRENT PREFERENCES')
+    print('Week:', preferences['WEEK'])
+    print('Day:', preferences["DAY"])
+    print()
+    return preferences
+
 def print_choices():
     print()
     print('Drexel Term Master Scheduler [SPRING 2017]')
@@ -130,12 +156,15 @@ if __name__ == "__main__":
     }
     running = ' '
     schedule = []
+    preferences = {}
     while running != 'Q':
         running = print_choices()
         if running == '1':
             schedule = add_to_schedule(schedule)
         elif running == '2':
             schedule = remove_from_schedule(schedule)
+        elif running == '3':
+            preferences = schedule_preferences(preferences)
 
     #print(create_schedule())
     #print_courses(load_subject(winter2017 + subjects['ENGL']))
