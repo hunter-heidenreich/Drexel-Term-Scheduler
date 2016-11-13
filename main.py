@@ -67,6 +67,22 @@ def remove_full(courses):
     return [c for c in courses if c['CAP'] != 'FULL']
 
 
+def create_schedule():
+    schedule = []
+    response = 'Y'
+    while response == 'Y':
+        schedule.append(add_course())
+        response = input('Add new course? (Y/N) ')
+    return schedule
+
+
+def add_course():
+    course = {}
+    course['SUBJECT'] = input('Enter subject: ')
+    course['COURSE'] = input('Enter the course number: ')
+    return course
+
+
 if __name__ == "__main__":
     winter2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDMyNToJHhmXlAaYXA0sQiEG1opmtoDgAb98cdpgAAAA%3D%3D'
     spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
@@ -74,4 +90,5 @@ if __name__ == "__main__":
         'ENGL': '&sp=SAS&sp=SENGL&sp=1',
         'BUSN': '&sp=SB&sp=SBUSN&sp=1'
     }
-    print_courses(load_subject(winter2017 + subjects['ENGL']))
+    print(create_schedule())
+    #print_courses(load_subject(winter2017 + subjects['ENGL']))
