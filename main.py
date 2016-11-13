@@ -95,6 +95,19 @@ def add_course():
     return course
 
 
+def remove_from_schedule(schedule):
+    removing = ' '
+    while removing != 'Q':
+        print()
+        print('Select course to remove: ')
+        for i in range(len(schedule)):
+            print(i, schedule[i]['SUBJECT'], schedule[i]['COURSE'])
+        removing = input('Which to remove? [Q] to quit: ')
+        if removing != 'Q':
+            del schedule[int(removing)]
+    return schedule
+
+
 def print_choices():
     print()
     print('Drexel Term Master Scheduler [SPRING 2017]')
@@ -120,7 +133,9 @@ if __name__ == "__main__":
     while running != 'Q':
         running = print_choices()
         if running == '1':
-            add_to_schedule(schedule)
+            schedule = add_to_schedule(schedule)
+        elif running == '2':
+            schedule = remove_from_schedule(schedule)
 
     #print(create_schedule())
     #print_courses(load_subject(winter2017 + subjects['ENGL']))
