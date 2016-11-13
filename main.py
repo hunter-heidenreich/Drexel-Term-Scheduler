@@ -68,8 +68,7 @@ def remove_full(courses):
     return [c for c in courses if c['CAP'] != 'FULL']
 
 
-def create_schedule():
-    schedule = []
+def add_to_schedule(schedule):
     response = 'Y'
     while response == 'Y':
         course = add_course()
@@ -96,6 +95,19 @@ def add_course():
     return course
 
 
+def print_choices():
+    print()
+    print('Drexel Term Master Scheduler [SPRING 2017]')
+    print()
+    print('[1] Add courses')
+    print('[2] Remove courses')
+    print('[3] Specify schedule preferences')
+    print('[4] Generate schedules')
+    print('[Q]uit')
+    print()
+    return input('Select choice: ')
+
+
 if __name__ == "__main__":
     winter2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDMyNToJHhmXlAaYXA0sQiEG1opmtoDgAb98cdpgAAAA%3D%3D'
     spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
@@ -103,5 +115,12 @@ if __name__ == "__main__":
         'ENGL': '&sp=SAS&sp=SENGL&sp=1',
         'BUSN': '&sp=SB&sp=SBUSN&sp=1'
     }
-    print(create_schedule())
+    running = ' '
+    schedule = []
+    while running != 'Q':
+        running = print_choices()
+        if running == '1':
+            add_to_schedule(schedule)
+
+    #print(create_schedule())
     #print_courses(load_subject(winter2017 + subjects['ENGL']))
