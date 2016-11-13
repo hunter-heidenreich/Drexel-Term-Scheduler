@@ -44,6 +44,7 @@ def course_to_dict(course):
         'PROF': course[10]
     }
 
+
 def format_time(time):
     n_time = [0, 0]
 
@@ -74,8 +75,17 @@ def create_schedule():
         course = add_course()
         if course.pop('RESPONSE', None) == 'Y':
             schedule.append(course)
+        print_schedule(schedule)
         response = input('Add new course? (Y/N) ')
     return schedule
+
+
+def print_schedule(schedule):
+    print()
+    print('CURRENT SCHEDULE')
+    for course in schedule:
+        print(course['SUBJECT'], course['COURSE'])
+    print()
 
 
 def add_course():
