@@ -71,7 +71,9 @@ def create_schedule():
     schedule = []
     response = 'Y'
     while response == 'Y':
-        schedule.append(add_course())
+        course = add_course()
+        if course.pop('RESPONSE', None) == 'Y':
+            schedule.append(course)
         response = input('Add new course? (Y/N) ')
     return schedule
 
@@ -80,6 +82,7 @@ def add_course():
     course = {}
     course['SUBJECT'] = input('Enter subject: ')
     course['COURSE'] = input('Enter the course number: ')
+    course['RESPONSE'] = input('Adding "' + course['SUBJECT'] + ' ' + course['COURSE'] + '". Correct? [Y/N] ')
     return course
 
 
