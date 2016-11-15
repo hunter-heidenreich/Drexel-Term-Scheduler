@@ -152,8 +152,14 @@ if __name__ == "__main__":
     winter2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDMyNToJHhmXlAaYXA0sQiEG1opmtoDgAb98cdpgAAAA%3D%3D'
     spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
     subjects = {
+        'BIO': '&sp=SAS&sp=SBIO&sp=1'
+        'BUSN': '&sp=SB&sp=SBUSN&sp=1',
+        'CS': '&sp=SCI&sp=SCS&sp=5',
         'ENGL': '&sp=SAS&sp=SENGL&sp=1',
-        'BUSN': '&sp=SB&sp=SBUSN&sp=1'
+        'ENGR': '&sp=SE&sp=SENGR&sp=6'
+        'MATH': '&sp=SAS&sp=SMATH&sp=1',
+        'PHYS': '&sp=SAS&sp=SPHYS&sp=1'
+
     }
     running = ' '
     schedule = []
