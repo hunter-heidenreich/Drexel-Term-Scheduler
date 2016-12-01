@@ -23,6 +23,13 @@ def load_subject(subject_url):
         courses[i] = course_to_dict(courses[i])
     return remove_full(courses)
 
+def load_course(subject, course):
+    restricted = []
+    for sub in subject:
+        if sub['COURSE'] == course:
+            restricted.append(sub)
+    return restricted
+
 
 def print_courses(courses):
     for course in courses:
@@ -157,7 +164,8 @@ def print_choices():
 def generate_schedules(subjects, schedule, preferences):
     spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
     for course in schedule:
-        print_courses(load_subject(spring2017 + subjects[course['SUBJECT']]))
+        sub = load_subject(spring2017 + subjects[course['SUBJECT']])
+        print_courses(load_course(sub, course['COURSE']))
 
 
 if __name__ == "__main__":
