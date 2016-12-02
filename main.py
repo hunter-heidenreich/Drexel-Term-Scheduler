@@ -1,3 +1,15 @@
+'''
+ - Restructure code to separate course types (lab, lecture, etc)
+ - Restructure preferences by setting high and low bounds for times of classes
+ - More time preferences in the form of lunch breaks
+ - Filter courses based on times
+ - Look at day preferences
+ - Generate schedules
+ - Generate visuals for schedules
+ - Generate txt files for CRNs of schedules
+'''
+
+
 from lxml import html
 import requests
 
@@ -22,6 +34,7 @@ def load_subject(subject_url):
     for i in range(len(courses)):
         courses[i] = course_to_dict(courses[i])
     return remove_full(courses)
+
 
 def load_course(subject, course):
     restricted = []
@@ -121,6 +134,7 @@ def remove_from_schedule(schedule):
 
 
 def schedule_preferences(preferences):
+    '''
     print()
     print('Week Preferences')
     print('[1] Early in the week')
@@ -150,6 +164,16 @@ def schedule_preferences(preferences):
     print('CURRENT PREFERENCES')
     print('Week:', preferences['WEEK'])
     print('Day:', preferences["DAY"])
+    print()
+    '''
+    print()
+    print('Time of Day Preference')
+    print('Times are in 24 hour format (0800 is 8 AM)')
+    preferences['EARLY_TIME'] = int(input('Enter the earleist hour you wish to start a class: '))
+    preferences['LATE_TIME'] = int(input('Enter the latest hour you wish to end a class: '))
+    print()
+    print('CURRENT PREFERENCES')
+    print('Time of Day:', preferences['EARLY_TIME'], '-', preferences['LATE_TIME'])
     print()
     return preferences
 
