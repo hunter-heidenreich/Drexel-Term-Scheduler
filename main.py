@@ -1,7 +1,5 @@
 '''
  - Restructure code to separate course types (lab, lecture, etc)
- - Restructure preferences by setting high and low bounds for times of classes
- - More time preferences in the form of lunch breaks
  - Filter courses based on times
  - Look at day preferences
  - Generate schedules
@@ -36,11 +34,13 @@ def load_subject(subject_url):
     return remove_full(courses)
 
 
-def load_course(subject, course):
+def load_course(subject, course, preferences):
     restricted = []
     for sub in subject:
         if sub['COURSE'] == course:
-            restricted.append(sub)
+            if sub['TIMES'][0] >= preferences['EARLY_TIME'] and sub['TIMES'][1] <= preferences['LATE_TIME']:
+                if preferences['LUNCH_HOUR'] < sub['TIMES'][0] or preferences['LUNCH_HOUR'] > sub['TIMES'][1]:
+                    restricted.append(sub)
     return restricted
 
 
@@ -73,11 +73,15 @@ def format_time(time):
 
         if time[6:8] == 'pm':
             n_time[0] = int(n_time[0]) + 1200
+            if n_time[0] == 2400:
+                n_time[0] = 1200
         else:
             n_time[0] = int(n_time[0])
 
         if time[17:19] == 'pm':
             n_time[1] = int(n_time[1]) + 1200
+            if n_time[1] == 2400:
+                n_time[1] = 1200
         else:
             n_time[1] = int(n_time[1])
 
@@ -196,7 +200,7 @@ def generate_schedules(subjects, schedule, preferences):
     spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
     for course in schedule:
         sub = load_subject(spring2017 + subjects[course['SUBJECT']])
-        print_courses(load_course(sub, course['COURSE']))
+        print_courses(load_course(sub, course['COURSE'], preferences))
 
 
 if __name__ == "__main__":
@@ -212,7 +216,11 @@ if __name__ == "__main__":
     }
     running = ' '
     schedule = []
-    preferences = {}
+    preferences = {
+        'EARLY_TIME': 0,
+        'LATE_TIME': 2400,
+        'LUNCH_HOUR': 0
+    }
     while running != 'Q':
         running = print_choices()
         if running == '1':
