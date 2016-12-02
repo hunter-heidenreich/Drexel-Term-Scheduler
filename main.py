@@ -168,12 +168,14 @@ def schedule_preferences(preferences):
     '''
     print()
     print('Time of Day Preference')
-    print('Times are in 24 hour format (0800 is 8 AM)')
+    print('Times are in 24 hour format (0800 is 8:00 AM)')
     preferences['EARLY_TIME'] = int(input('Enter the earleist hour you wish to start a class: '))
     preferences['LATE_TIME'] = int(input('Enter the latest hour you wish to end a class: '))
+    preferences['LUNCH_HOUR'] = int(input('Specify a lunch hour (0 for no lunch hour): '))
     print()
     print('CURRENT PREFERENCES')
     print('Time of Day:', preferences['EARLY_TIME'], '-', preferences['LATE_TIME'])
+    print('Lunch Hour:', preferences['LUNCH_HOUR'])
     print()
     return preferences
 
