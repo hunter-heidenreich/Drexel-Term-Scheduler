@@ -98,7 +98,12 @@ def add_course():
     course = {}
     course['SUBJECT'] = input('Enter subject: ')
     course['COURSE'] = input('Enter the course number: ')
-    course['RESPONSE'] = input('Adding "' + course['SUBJECT'] + ' ' + course['COURSE'] + '". Correct? [Y/N] ')
+    course['TYPES'] = []
+    response = 'Y'
+    while  response == 'Y':
+        course['TYPES'].append(input('Enter part of course (Lab, Lecture, etc.): '))
+        response = input('Add another part? [Y/N]: ')
+    course['RESPONSE'] = input('Adding "' + course['SUBJECT'] + ' ' + course['COURSE'] + '" with ' + str(course['TYPES']) + '. Correct? [Y/N]: ')
     return course
 
 
