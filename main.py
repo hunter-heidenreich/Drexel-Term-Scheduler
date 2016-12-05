@@ -107,7 +107,7 @@ def print_schedule(schedule):
     print()
     print('CURRENT SCHEDULE')
     for course in schedule:
-        print(course['SUBJECT'], course['COURSE'])
+        print(course['SUBJECT'], course['COURSE'], course['TYPE'])
     print()
 
 
@@ -115,12 +115,8 @@ def add_course():
     course = {}
     course['SUBJECT'] = input('Enter subject: ')
     course['COURSE'] = input('Enter the course number: ')
-    course['TYPES'] = []
-    response = 'Y'
-    while  response == 'Y':
-        course['TYPES'].append(input('Enter part of course (Lab, Lecture, etc.): '))
-        response = input('Add another part? [Y/N]: ')
-    course['RESPONSE'] = input('Adding "' + course['SUBJECT'] + ' ' + course['COURSE'] + '" with ' + str(course['TYPES']) + '. Correct? [Y/N]: ')
+    course['TYPE'] = input('Enter part of course (Lab, Lecture, etc.): ')
+    course['RESPONSE'] = input('Adding "' + course['SUBJECT'] + ' ' + course['COURSE'] + ' ' + course['TYPE'] + '". Correct? [Y/N]: ')
     return course
 
 
