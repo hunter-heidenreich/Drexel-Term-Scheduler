@@ -126,7 +126,7 @@ def remove_from_schedule(schedule):
         print()
         print('Select course to remove: ')
         for i in range(len(schedule)):
-            print(i, schedule[i]['SUBJECT'], schedule[i]['COURSE'])
+            print(i, schedule[i]['SUBJECT'], schedule[i]['COURSE'], schedule[i]['TYPE'])
         removing = input('Which to remove? [Q] to quit: ')
         if removing != 'Q':
             del schedule[int(removing)]
