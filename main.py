@@ -37,10 +37,11 @@ def load_subject(subject_url):
 def load_course(subject, course, preferences):
     restricted = []
     for sub in subject:
-        if sub['COURSE'] == course:
-            if sub['TIMES'][0] >= preferences['EARLY_TIME'] and sub['TIMES'][1] <= preferences['LATE_TIME']:
-                if preferences['LUNCH_HOUR'] < sub['TIMES'][0] or preferences['LUNCH_HOUR'] > sub['TIMES'][1]:
-                    restricted.append(sub)
+        if sub['COURSE'] == course['COURSE']:
+            if sub['TYPE'] == course['TYPE']:
+                if sub['TIMES'][0] >= preferences['EARLY_TIME'] and sub['TIMES'][1] <= preferences['LATE_TIME']:
+                    if preferences['LUNCH_HOUR'] < sub['TIMES'][0] or preferences['LUNCH_HOUR'] > sub['TIMES'][1]:
+                        restricted.append(sub)
     return restricted
 
 
@@ -197,7 +198,7 @@ def generate_schedules(subjects, schedule, preferences):
     for course in schedule:
         if len(subjects[course['SUBJECT']]['courses']) == 0:
             subjects[course['SUBJECT']]['courses'] = load_subject(spring2017 + subjects[course['SUBJECT']]['link'])
-        print_courses(load_course(subjects[course['SUBJECT']]['courses'], course['COURSE'], preferences))
+        print_courses(load_course(subjects[course['SUBJECT']]['courses'], course, preferences))
 
 
 if __name__ == "__main__":
