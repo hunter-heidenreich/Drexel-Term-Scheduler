@@ -195,8 +195,9 @@ def print_choices():
 def generate_schedules(subjects, schedule, preferences):
     spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
     for course in schedule:
-        sub = load_subject(spring2017 + subjects[course['SUBJECT']])
-        print_courses(load_course(sub, course['COURSE'], preferences))
+        if len(subjects[course['SUBJECT']]['courses']) == 0:
+            subjects[course['SUBJECT']]['courses'] = load_subject(spring2017 + subjects[course['SUBJECT']]['link'])
+        print_courses(load_course(subjects[course['SUBJECT']]['courses'], course['COURSE'], preferences))
 
 
 if __name__ == "__main__":
