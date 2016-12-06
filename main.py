@@ -201,13 +201,34 @@ def generate_schedules(subjects, schedule, preferences):
 
 if __name__ == "__main__":
     subjects = {
-        'BIO': '&sp=SAS&sp=SBIO&sp=1',
-        'BUSN': '&sp=SB&sp=SBUSN&sp=1',
-        'CS': '&sp=SCI&sp=SCS&sp=5',
-        'ENGL': '&sp=SAS&sp=SENGL&sp=1',
-        'ENGR': '&sp=SE&sp=SENGR&sp=6',
-        'MATH': '&sp=SAS&sp=SMATH&sp=1',
-        'PHYS': '&sp=SAS&sp=SPHYS&sp=1'
+        'BIO': {
+            'link': '&sp=SAS&sp=SBIO&sp=1',
+            'courses': []
+        },
+        'BUSN': {
+            'link': '&sp=SB&sp=SBUSN&sp=1',
+            'courses': []
+        },
+        'CS': {
+            'link': '&sp=SCI&sp=SCS&sp=5',
+            'courses': []
+        },
+        'ENGL': {
+            'link': '&sp=SAS&sp=SENGL&sp=1',
+            'courses': []
+        },
+        'ENGR': {
+            'link': '&sp=SE&sp=SENGR&sp=6',
+            'courses': []
+        },
+        'MATH': {
+            'link': '&sp=SAS&sp=SMATH&sp=1',
+            'courses': []
+        },
+        'PHYS': {
+            'link': '&sp=SAS&sp=SPHYS&sp=1',
+            'courses': []
+        }
 
     }
     running = ' '
