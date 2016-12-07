@@ -1,6 +1,4 @@
 '''
- - Restructure code to separate course types (lab, lecture, etc)
- - Filter courses based on times
  - Look at day preferences
  - Generate schedules
  - Generate visuals for schedules
@@ -124,49 +122,26 @@ def add_course():
 def remove_from_schedule(schedule):
     removing = ' '
     while removing != 'Q':
-        print()
-        print('Select course to remove: ')
-        for i in range(len(schedule)):
-            print(i, schedule[i]['SUBJECT'], schedule[i]['COURSE'], schedule[i]['TYPE'])
-        removing = input('Which to remove? [Q] to quit: ')
-        if removing != 'Q':
-            del schedule[int(removing)]
+        if len(schedule) > 0:
+            print()
+            print('Select course to remove: ')
+            for i in range(len(schedule)):
+                print(i, schedule[i]['SUBJECT'], schedule[i]['COURSE'], schedule[i]['TYPE'])
+            removing = input('Which to remove? [Q] to quit: ')
+            try:
+                del schedule[int(removing)]
+            except ValueError:
+                removing = 'Q'
+            except IndexError:
+                print('Not a valid choice.')
+        else:
+            print('No schedule yet.')
+            removing = 'Q'
+
     return schedule
 
 
 def schedule_preferences(preferences):
-    '''
-    print()
-    print('Week Preferences')
-    print('[1] Early in the week')
-    print('[2] Late in the week')
-    print('[3] Middle of the week')
-    print('[4] Alternating days')
-    print('[5] Concentrate to 1-3 days of the week')
-    print('[6] No preference')
-    preferences['WEEK'] = int(input('Select option: '))
-    print()
-    print('Day Preferences')
-    print('[1] Early in the day')
-    print('[2] Late in the day')
-    print('[3] Middle of the day')
-    print('[4] Spread out classes')
-    print('[5] Concentrate classes together in the day')
-    print('[6] Noon gap (for lunch)')
-    print('[7] No preferences')
-    preferences['DAY'] = int(input('Select option: '))
-    print()
-    print('Class Style Preferences')
-    print('[1] Normal')
-    print('[2] Hybrid')
-    print('[3] No preferences')
-    preferences['STYLE'] = int(input('Select option: '))
-    print()
-    print('CURRENT PREFERENCES')
-    print('Week:', preferences['WEEK'])
-    print('Day:', preferences["DAY"])
-    print()
-    '''
     print()
     print('Time of Day Preference')
     print('Times are in 24 hour format (0800 is 8:00 AM)')
@@ -250,6 +225,3 @@ if __name__ == "__main__":
             preferences = schedule_preferences(preferences)
         elif running == '4':
             generate_schedules(subjects, schedule, preferences)
-
-    #print(create_schedule())
-    #print_courses(load_subject(winter2017 + subjects['ENGL']))
