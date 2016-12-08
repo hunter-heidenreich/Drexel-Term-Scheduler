@@ -18,18 +18,22 @@ def load_subject(subject_url):
     crns = tree.xpath('//tr[@class="even"]/td/p/a/text() | //tr[@class="odd"]/td/p/a/text()')
     capacity = tree.xpath('//tr[@class="even"]/td/p/attribute::title | //tr[@class="odd"]/td/p/attribute::title')
     courses = []
-    for x in range(len(courselist)):
-        if x % 11 == 0:
-            courses.append([])
-        elif x % 11 == 6:
-            courselist[x] = crns[x // 11]
-        elif x % 11 == 9:
-            courselist[x] = capacity[x // 11]
-        courses[len(courses) - 1].append(courselist[x])
+    try:
+        for x in range(len(courselist)):
+            if x % 11 == 0:
+                courses.append([])
+            elif x % 11 == 6:
+                courselist[x] = crns[x // 11]
+            elif x % 11 == 9:
+                courselist[x] = capacity[x // 11]
+            courses[len(courses) - 1].append(courselist[x])
 
-    for i in range(len(courses)):
-        courses[i] = course_to_dict(courses[i])
-    return remove_full(courses)
+        for i in range(len(courses)):
+            courses[i] = course_to_dict(courses[i])
+        return remove_full(courses)
+    except IndexError:
+        print('This subject is still being finalized for the selected term.')
+        return []
 
 
 def load_course(subject, course, preferences):
