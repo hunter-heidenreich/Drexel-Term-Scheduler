@@ -61,11 +61,27 @@ def course_to_dict(course):
         'SECTION': course[4],
         'TITLE': course[5],
         'CRN': course[6],
-        'DAYS': course[7],
+        'DAYS': format_days(course[7]),
         'TIMES': format_time(course[8]),
         'CAP': course[9],
         'PROF': course[10]
     }
+
+
+def format_days(day_string):
+    days = [0, 0, 0, 0, 0]
+    for char in day_string:
+        if char == 'M':
+            days[0] = 1
+        elif char == 'T':
+            days[1] = 1
+        elif char == 'W':
+            days[2] = 1
+        elif char == 'R':
+            days[3] = 1
+        elif char == 'F':
+            days[4] = 1
+    return days
 
 
 def format_time(time):
