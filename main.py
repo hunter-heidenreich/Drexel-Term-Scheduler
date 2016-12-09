@@ -169,9 +169,22 @@ def schedule_preferences(preferences):
     preferences['LATE_TIME'] = int(input('Enter the latest hour you wish to end a class: '))
     preferences['LUNCH_HOUR'] = int(input('Specify a lunch hour (0 for no lunch hour): '))
     print()
-    print('CURRENT PREFERENCES')
+    print('CURRENT TIME PREFERENCES')
     print('Time of Day:', preferences['EARLY_TIME'], '-', preferences['LATE_TIME'])
     print('Lunch Hour:', preferences['LUNCH_HOUR'])
+    print()
+    print('Day Preferences')
+    print('List the amount of classes you want per day. Enter 9 if it doesn\'t matter.')
+    if('DAYS' not in preferences.keys()):
+        preferences['DAYS'] = [0, 0, 0, 0, 0]
+    preferences['DAYS'][0] = int(input('Enter the number of classes for Monday: '))
+    preferences['DAYS'][1] = int(input('Enter the number of classes for Tuesday: '))
+    preferences['DAYS'][2] = int(input('Enter the number of classes for Wednesday: '))
+    preferences['DAYS'][3] = int(input('Enter the number of classes for Thursday: '))
+    preferences['DAYS'][4] = int(input('Enter the number of classes for Friday: '))
+    print()
+    print('CURRENT DAY PREFERENCES')
+    print('Day limits (Mon-Fri):', preferences['DAYS'])
     print()
     return preferences
 
