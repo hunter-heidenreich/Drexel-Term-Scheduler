@@ -203,12 +203,31 @@ def print_choices():
 
 def generate_schedules(subjects, schedule, preferences):
     spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
-    selection = {}
+    selection = []
     for course in schedule:
         if len(subjects[course['SUBJECT']]['courses']) == 0:
             subjects[course['SUBJECT']]['courses'] = load_subject(spring2017 + subjects[course['SUBJECT']]['link'])
-        selection[course['SUBJECT'] + '-' + course['COURSE'] + '-' + course['TYPE']] = load_course(subjects[course['SUBJECT']]['courses'], course, preferences)
-    print(selection)
+        selection.append(load_course(subjects[course['SUBJECT']]['courses'], course, preferences))
+    #print(selection)
+    recursive_generator([], selection.pop(), selection)
+
+
+def recursive_generator(schedule, current, leftover):
+    for c in current:
+        check_val = True
+        for s in schedule:
+            if c['TIMES'][0] >= s['TIMES'][0] and c['TIMES'][0] <= s['TIMES'][1]:
+                check_val = False
+            elif c['TIMES'][1] >= s['TIMES'][0] and c['TIMES'][1] <= s['TIMES'][1]:
+                    check_val = False
+        if check_val:
+            copy = schedule
+            copy.append(c)
+            if len(leftover) > 0:
+                recursive_generator(copy, leftover.pop(), leftover)
+            else:
+                print(copy)
+
 
 
 if __name__ == "__main__":
