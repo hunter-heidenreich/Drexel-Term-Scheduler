@@ -234,7 +234,7 @@ def recursive_generator(schedule, current, leftover):
 def print_as_block(schedule):
     days = []
     t = 800
-    while t < 2100:
+    while t < 2200:
         days.append(t)
         t += 50
 
