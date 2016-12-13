@@ -5,7 +5,7 @@
  - Generate txt files for CRNs of schedules
 '''
 
-
+import copy
 from lxml import html
 import requests
 
@@ -216,18 +216,26 @@ def recursive_generator(schedule, current, leftover):
     for c in current:
         check_val = True
         for s in schedule:
-            if c['TIMES'][0] >= s['TIMES'][0] and c['TIMES'][0] <= s['TIMES'][1]:
-                check_val = False
-            elif c['TIMES'][1] >= s['TIMES'][0] and c['TIMES'][1] <= s['TIMES'][1]:
+            if c['DAYS'] == s['DAYS']:
+                if c['TIMES'][0] >= s['TIMES'][0] and c['TIMES'][0] <= s['TIMES'][1]:
                     check_val = False
+                elif c['TIMES'][1] >= s['TIMES'][0] and c['TIMES'][1] <= s['TIMES'][1]:
+                        check_val = False
         if check_val:
-            copy = schedule
-            copy.append(c)
+            dupe = copy.deepcopy(schedule)
+            dupe.append(c)
             if len(leftover) > 0:
-                recursive_generator(copy, leftover.pop(), leftover)
+                lefts = copy.deepcopy(leftover)
+                recursive_generator(dupe, lefts.pop(), lefts)
             else:
-                print(copy)
+                print_as_block(dupe)
 
+
+def print_as_block(schedule):
+    print()
+    for course in schedule:
+        print(course['SUBJECT'], course['COURSE'], course['SECTION'])
+    print()
 
 
 if __name__ == "__main__":
