@@ -249,13 +249,14 @@ def print_as_block(schedule):
         for d in range(len(course['DAYS'])):
             if course['DAYS'][d] == 1:
                 time_start = (course['TIMES'][0] // 50) - (800 // 50)
-                time_end = (course['TIMES'][1] // 50) - (800 // 50)
+                time_end = (course['TIMES'][1] // 50) - (800 // 50) + 1
                 for time in range(time_start, time_end):
-                    full_sched[d + 1][time] = course['SUBJECT'] + course['COURSE'] + course['SECTION']
+                    full_sched[d + 1][time] = course['SUBJECT'] + ' ' + course['COURSE'] + ' ' + course['SECTION']
 
     print()
     for x in range(len(days)):
-        print('%d\t%s\t%s\t%s\t%s\t%s' % (full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
+        print ("{0:^14} {1:^14} {2:^14} {3:^14} {4:^14} {5:^14}".format(full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
+        #print('%d\t%s\t%s\t%s\t%s\t%s' % (full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
     print()
 
 
