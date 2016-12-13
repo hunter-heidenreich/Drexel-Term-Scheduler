@@ -232,9 +232,30 @@ def recursive_generator(schedule, current, leftover):
 
 
 def print_as_block(schedule):
-    print()
+    days = []
+    t = 800
+    while t < 2100:
+        days.append(t)
+        t += 50
+
+    full_sched = []
+    full_sched.append(days)
+    for i in range(1, 6):
+        full_sched.append([])
+        for x in range(len(days)):
+            full_sched[i].append(' ')
+
     for course in schedule:
-        print(course['SUBJECT'], course['COURSE'], course['SECTION'])
+        for d in range(len(course['DAYS'])):
+            if course['DAYS'][d] == 1:
+                time_start = (course['TIMES'][0] // 50) - (800 // 50)
+                time_end = (course['TIMES'][1] // 50) - (800 // 50)
+                for time in range(time_start, time_end):
+                    full_sched[d + 1][time] = course['SUBJECT'] + course['COURSE'] + course['SECTION']
+
+    print()
+    for x in range(len(days)):
+        print('%d\t%s\t%s\t%s\t%s\t%s' % (full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
     print()
 
 
@@ -277,6 +298,7 @@ if __name__ == "__main__":
         'LATE_TIME': 2400,
         'LUNCH_HOUR': 0
     }
+
     while running != 'Q':
         running = print_choices()
         if running == '1':
