@@ -235,7 +235,10 @@ def print_as_block(schedule):
     days = []
     t = 800
     while t < 2200:
-        days.append(t)
+        if not (t % 100 == 0):
+            days.append((t - 20))
+        else:
+            days.append(t)
         t += 50
 
     full_sched = []
