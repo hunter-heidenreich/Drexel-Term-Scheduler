@@ -39,20 +39,16 @@ def load_subject(subject_url):
 def load_course(subject, course, preferences):
     restricted = []
     for sub in subject:
-        try:
-            if int(sub['SECTION']) < 300:
-                if sub['COURSE'] == course['COURSE']:
-                    if sub['TYPE'] == course['TYPE']:
-                        if sub['TIMES'][0] >= preferences['EARLY_TIME'] and sub['TIMES'][1] <= preferences['LATE_TIME']:
-
-                            if preferences['LUNCH_HOUR'] < sub['TIMES'][0] or preferences['LUNCH_HOUR'] > sub['TIMES'][1]:
+        if sub['COURSE'] == course['COURSE']:
+            if sub['TYPE'] == course['TYPE']:
+                if sub['TIMES'][0] >= preferences['EARLY_TIME'] and sub['TIMES'][1] <= preferences['LATE_TIME']:
+                    if preferences['LUNCH_HOUR'] < sub['TIMES'][0] or preferences['LUNCH_HOUR'] > sub['TIMES'][1]:
+                        try:
+                            if int(sub['SECTION']) < 300:
                                 restricted.append(sub)
-        except ValueError:
-            if sub['COURSE'] == course['COURSE']:
-                if sub['TYPE'] == course['TYPE']:
-                    if sub['TIMES'][0] >= preferences['EARLY_TIME'] and sub['TIMES'][1] <= preferences['LATE_TIME']:
-                        if preferences['LUNCH_HOUR'] < sub['TIMES'][0] or preferences['LUNCH_HOUR'] > sub['TIMES'][1]:
+                        except ValueError:
                             restricted.append(sub)
+                            
     return restricted
 
 
