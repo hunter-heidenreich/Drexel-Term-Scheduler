@@ -48,7 +48,7 @@ def load_course(subject, course, preferences):
                                 restricted.append(sub)
                         except ValueError:
                             restricted.append(sub)
-                            
+
     return restricted
 
 
@@ -213,11 +213,10 @@ def generate_schedules(subjects, schedule, preferences):
         if len(subjects[course['SUBJECT']]['courses']) == 0:
             subjects[course['SUBJECT']]['courses'] = load_subject(spring2017 + subjects[course['SUBJECT']]['link'])
         selection.append(load_course(subjects[course['SUBJECT']]['courses'], course, preferences))
-    #print(selection)
-    recursive_generator([], selection.pop(), selection)
+    recursive_generator([], selection.pop(), selection, preferences['DAYS'])
 
 
-def recursive_generator(schedule, current, leftover):
+def recursive_generator(schedule, current, leftover, days_available):
     for c in current:
         check_val = True
         for s in schedule:
@@ -231,7 +230,7 @@ def recursive_generator(schedule, current, leftover):
             dupe.append(c)
             if len(leftover) > 0:
                 lefts = copy.deepcopy(leftover)
-                recursive_generator(dupe, lefts.pop(), lefts)
+                recursive_generator(dupe, lefts.pop(), lefts, days_available)
             else:
                 print_as_block(dupe)
 
@@ -264,7 +263,6 @@ def print_as_block(schedule):
     print()
     for x in range(len(days)):
         print ("{0:^14} {1:^14} {2:^14} {3:^14} {4:^14} {5:^14}".format(full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
-        #print('%d\t%s\t%s\t%s\t%s\t%s' % (full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
     print()
 
 
