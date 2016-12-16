@@ -44,8 +44,8 @@ def load_course(subject, course, preferences):
                 if sub['COURSE'] == course['COURSE']:
                     if sub['TYPE'] == course['TYPE']:
                         if sub['TIMES'][0] >= preferences['EARLY_TIME'] and sub['TIMES'][1] <= preferences['LATE_TIME']:
+
                             if preferences['LUNCH_HOUR'] < sub['TIMES'][0] or preferences['LUNCH_HOUR'] > sub['TIMES'][1]:
-                                print(sub['COURSE'], sub['SECTION'])
                                 restricted.append(sub)
         except ValueError:
             if sub['COURSE'] == course['COURSE']:
@@ -101,15 +101,15 @@ def format_time(time):
 
         if time[6:8] == 'pm':
             n_time[0] = int(n_time[0]) + 1200
-            if n_time[0] == 2400:
-                n_time[0] = 1200
+            if n_time[0] >= 2400:
+                n_time[0] -= 1200
         else:
             n_time[0] = int(n_time[0])
 
         if time[17:19] == 'pm':
             n_time[1] = int(n_time[1]) + 1200
-            if n_time[1] == 2400:
-                n_time[1] = 1200
+            if n_time[1] >= 2400:
+                n_time[1] -= 1200
         else:
             n_time[1] = int(n_time[1])
 
