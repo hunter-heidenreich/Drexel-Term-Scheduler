@@ -224,13 +224,20 @@ def recursive_generator(schedule, current, leftover, days_available):
                 if c['TIMES'][0] >= s['TIMES'][0] and c['TIMES'][0] <= s['TIMES'][1]:
                     check_val = False
                 elif c['TIMES'][1] >= s['TIMES'][0] and c['TIMES'][1] <= s['TIMES'][1]:
-                        check_val = False
+                    check_val = False
+        if check_val:
+            for x in range(len(days_available)):
+                if days_available[x] < c['DAYS'][x]:
+                    check_val = False
         if check_val:
             dupe = copy.deepcopy(schedule)
             dupe.append(c)
+            saved_days = copy.deepcopy(days_available)
+            for x in range(len(c['DAYS'])):
+                saved_days[x] -= c['DAYS'][x]
             if len(leftover) > 0:
                 lefts = copy.deepcopy(leftover)
-                recursive_generator(dupe, lefts.pop(), lefts, days_available)
+                recursive_generator(dupe, lefts.pop(), lefts, saved_days)
             else:
                 print_as_block(dupe)
 
