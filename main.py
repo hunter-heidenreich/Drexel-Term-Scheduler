@@ -41,13 +41,11 @@ def load_course(subject, course, preferences):
     for sub in subject:
         if sub['COURSE'] == course['COURSE']:
             if sub['TYPE'] == course['TYPE']:
-                if sub['TIMES'][0] >= preferences['EARLY_TIME'] and sub['TIMES'][1] <= preferences['LATE_TIME']:
-                    if preferences['LUNCH_HOUR'] < sub['TIMES'][0] or preferences['LUNCH_HOUR'] > sub['TIMES'][1]:
-                        try:
-                            if int(sub['SECTION']) < 300:
-                                restricted.append(sub)
-                        except ValueError:
-                            restricted.append(sub)
+                try:
+                    if int(sub['SECTION']) < 300:
+                        restricted.append(sub)
+                except ValueError:
+                    restricted.append(sub)
 
     return restricted
 
@@ -213,31 +211,36 @@ def generate_schedules(subjects, schedule, preferences):
         if len(subjects[course['SUBJECT']]['courses']) == 0:
             subjects[course['SUBJECT']]['courses'] = load_subject(spring2017 + subjects[course['SUBJECT']]['link'])
         selection.append(load_course(subjects[course['SUBJECT']]['courses'], course, preferences))
-    recursive_generator([], selection.pop(), selection, preferences['DAYS'])
+    recursive_generator([], selection.pop(), selection, preferences)
 
 
-def recursive_generator(schedule, current, leftover, days_available):
+def recursive_generator(schedule, current, leftover, prefs):
     for c in current:
         check_val = True
-        for s in schedule:
-            if c['DAYS'] == s['DAYS']:
-                if c['TIMES'][0] >= s['TIMES'][0] and c['TIMES'][0] <= s['TIMES'][1]:
-                    check_val = False
-                elif c['TIMES'][1] >= s['TIMES'][0] and c['TIMES'][1] <= s['TIMES'][1]:
-                    check_val = False
+        if c['TIMES'][0] < prefs['EARLY_TIME'] or c['TIMES'][1] > prefs['LATE_TIME']:
+            check_val = False
+        if prefs['LUNCH_HOUR'] >= c['TIMES'][0] and prefs['LUNCH_HOUR'] < c['TIMES'][1]:
+            check_val = False
         if check_val:
-            for x in range(len(days_available)):
-                if days_available[x] < c['DAYS'][x]:
+            for s in schedule:
+                if c['DAYS'] == s['DAYS']:
+                    if c['TIMES'][0] >= s['TIMES'][0] and c['TIMES'][0] <= s['TIMES'][1]:
+                        check_val = False
+                    elif c['TIMES'][1] >= s['TIMES'][0] and c['TIMES'][1] <= s['TIMES'][1]:
+                        check_val = False
+        if check_val:
+            for x in range(len(prefs['DAYS'])):
+                if prefs['DAYS'][x] < c['DAYS'][x]:
                     check_val = False
         if check_val:
             dupe = copy.deepcopy(schedule)
             dupe.append(c)
-            saved_days = copy.deepcopy(days_available)
+            saved_prefs = copy.deepcopy(prefs)
             for x in range(len(c['DAYS'])):
-                saved_days[x] -= c['DAYS'][x]
+                saved_prefs['DAYS'][x] -= c['DAYS'][x]
             if len(leftover) > 0:
                 lefts = copy.deepcopy(leftover)
-                recursive_generator(dupe, lefts.pop(), lefts, saved_days)
+                recursive_generator(dupe, lefts.pop(), lefts, saved_prefs)
             else:
                 print_as_block(dupe)
 
