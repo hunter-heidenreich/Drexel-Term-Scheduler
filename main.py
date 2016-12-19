@@ -1,6 +1,8 @@
 '''
  - Some courses have classes ocurring at different times on different days.
    How should that be handled?
+ - Seems like a bug in not displaying all the classes? Not sure. Doesn't show up
+   all the time.
  - Generate visuals for schedules
  - Generate txt files for CRNs of schedules
 '''
@@ -9,6 +11,7 @@ import copy
 from lxml import html
 import requests
 
+SCHED_ID = 0
 
 def load_subject(subject, subject_url):
     page = requests.get(subject_url)
@@ -216,8 +219,10 @@ def print_choices():
 
 
 def generate_schedules(subjects, schedule, preferences):
+    global SCHED_ID
     spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
     selection = []
+    SCHED_ID = 0
     for course in schedule:
         if len(subjects[course['SUBJECT']]['courses']) == 0:
             subjects[course['SUBJECT']]['courses'] = load_subject(course['SUBJECT'], spring2017 + subjects[course['SUBJECT']]['link'])
@@ -226,38 +231,42 @@ def generate_schedules(subjects, schedule, preferences):
 
 
 def recursive_generator(schedule, current, leftover, prefs):
-    for c in current:
-        check_val = True
-        if c['TIMES'][0] < prefs['EARLY_TIME'] or c['TIMES'][1] > prefs['LATE_TIME']:
-            check_val = False
-        if prefs['LUNCH_HOUR'] >= c['TIMES'][0] and prefs['LUNCH_HOUR'] < c['TIMES'][1]:
-            check_val = False
-        if check_val:
-            for s in schedule:
+    global SCHED_ID
+    if SCHED_ID < 100:
+        for c in current:
+            check_val = True
+            if c['TIMES'][0] < prefs['EARLY_TIME'] or c['TIMES'][1] > prefs['LATE_TIME']:
+                check_val = False
+            if prefs['LUNCH_HOUR'] >= c['TIMES'][0] and prefs['LUNCH_HOUR'] < c['TIMES'][1]:
+                check_val = False
+            if check_val:
+                for s in schedule:
+                    for x in range(len(c['DAYS'])):
+                        if c['DAYS'][x] == 1 and s['DAYS'][x] == 1:
+                            if c['TIMES'][0] >= s['TIMES'][0] and c['TIMES'][0] <= s['TIMES'][1]:
+                                check_val = False
+                            elif c['TIMES'][1] >= s['TIMES'][0] and c['TIMES'][1] <= s['TIMES'][1]:
+                                check_val = False
+            if check_val:
+                for x in range(len(prefs['DAYS'])):
+                    if prefs['DAYS'][x] < c['DAYS'][x]:
+                        check_val = False
+            if check_val:
+                dupe = copy.deepcopy(schedule)
+                dupe.append(c)
+                saved_prefs = copy.deepcopy(prefs)
                 for x in range(len(c['DAYS'])):
-                    if c['DAYS'][x] == 1 and s['DAYS'][x] == 1:
-                        if c['TIMES'][0] >= s['TIMES'][0] and c['TIMES'][0] <= s['TIMES'][1]:
-                            check_val = False
-                        elif c['TIMES'][1] >= s['TIMES'][0] and c['TIMES'][1] <= s['TIMES'][1]:
-                            check_val = False
-        if check_val:
-            for x in range(len(prefs['DAYS'])):
-                if prefs['DAYS'][x] < c['DAYS'][x]:
-                    check_val = False
-        if check_val:
-            dupe = copy.deepcopy(schedule)
-            dupe.append(c)
-            saved_prefs = copy.deepcopy(prefs)
-            for x in range(len(c['DAYS'])):
-                saved_prefs['DAYS'][x] -= c['DAYS'][x]
-            if len(leftover) > 0:
-                lefts = copy.deepcopy(leftover)
-                recursive_generator(dupe, lefts.pop(), lefts, saved_prefs)
-            else:
-                print_as_block(dupe)
+                    saved_prefs['DAYS'][x] -= c['DAYS'][x]
+                if len(leftover) > 0:
+                    lefts = copy.deepcopy(leftover)
+                    recursive_generator(dupe, lefts.pop(), lefts, saved_prefs)
+                else:
+                    SCHED_ID += 1
+                    print_as_block(dupe, True)
 
 
-def print_as_block(schedule):
+def print_as_block(schedule, to_file):
+    global SCHED_ID
     days = []
     t = 800
     while t < 2200:
@@ -281,11 +290,21 @@ def print_as_block(schedule):
                 time_end = (course['TIMES'][1] // 50) - (800 // 50) + 1
                 for time in range(time_start, time_end):
                     full_sched[d + 1][time] = course['SUBJECT'] + ' ' + course['COURSE'] + ' ' + course['SECTION']
-
-    print()
-    for x in range(len(days)):
-        print ("{0:^14} {1:^14} {2:^14} {3:^14} {4:^14} {5:^14}".format(full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
-    print()
+    if to_file:
+        file = open('test.txt', 'a+')
+        file.write('SCHEDULE ID: ')
+        file.write(str(SCHED_ID))
+        file.write('\n')
+        for x in range(len(days)):
+            file.write ("{0:^14} {1:^14} {2:^14} {3:^14} {4:^14} {5:^14}".format(full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
+            file.write('\n')
+        file.write('\n')
+        file.close()
+    else:
+        print()
+        for x in range(len(days)):
+            print ("{0:^14} {1:^14} {2:^14} {3:^14} {4:^14} {5:^14}".format(full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
+        print()
 
 
 if __name__ == "__main__":
