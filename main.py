@@ -1,4 +1,6 @@
 '''
+ - Some courses have classes ocurring at different times on different days.
+   How should that be handled?
  - Generate visuals for schedules
  - Generate txt files for CRNs of schedules
 '''
@@ -8,7 +10,7 @@ from lxml import html
 import requests
 
 
-def load_subject(subject_url):
+def load_subject(subject, subject_url):
     page = requests.get(subject_url)
     tree = html.fromstring(page.content)
 
@@ -17,14 +19,25 @@ def load_subject(subject_url):
     capacity = tree.xpath('//tr[@class="even"]/td/p/attribute::title | //tr[@class="odd"]/td/p/attribute::title')
     courses = []
     try:
-        for x in range(len(courselist)):
-            if x % 11 == 0:
-                courses.append([])
-            elif x % 11 == 6:
-                courselist[x] = crns[x // 11]
-            elif x % 11 == 9:
-                courselist[x] = capacity[x // 11]
-            courses[len(courses) - 1].append(courselist[x])
+        if not (subject == 'BIO'):
+            for x in range(len(courselist)):
+                if x % 11 == 0:
+                    courses.append([])
+                elif x % 11 == 6:
+                    courselist[x] = crns[x // 11]
+                elif x % 11 == 9:
+                    courselist[x] = capacity[x // 11]
+                courses[len(courses) - 1].append(courselist[x])
+        else:
+            for x in range(446, 1073):
+                manip = x - 446
+                if manip % 11 == 0:
+                    courses.append([])
+                elif manip % 11 == 6:
+                    courselist[x] = crns[x // 11]
+                elif manip % 11 == 9:
+                    courselist[x] = capacity[x // 11]
+                courses[len(courses) - 1].append(courselist[x])
 
         for i in range(len(courses)):
             courses[i] = course_to_dict(courses[i])
@@ -207,7 +220,7 @@ def generate_schedules(subjects, schedule, preferences):
     selection = []
     for course in schedule:
         if len(subjects[course['SUBJECT']]['courses']) == 0:
-            subjects[course['SUBJECT']]['courses'] = load_subject(spring2017 + subjects[course['SUBJECT']]['link'])
+            subjects[course['SUBJECT']]['courses'] = load_subject(course['SUBJECT'], spring2017 + subjects[course['SUBJECT']]['link'])
         selection.append(load_course(subjects[course['SUBJECT']]['courses'], course, preferences))
     recursive_generator([], selection.pop(), selection, preferences)
 
@@ -312,7 +325,8 @@ if __name__ == "__main__":
     preferences = {
         'EARLY_TIME': 0,
         'LATE_TIME': 2400,
-        'LUNCH_HOUR': 0
+        'LUNCH_HOUR': 0,
+        'DAYS': [9, 9, 9, 9, 9]
     }
 
     while running != 'Q':
