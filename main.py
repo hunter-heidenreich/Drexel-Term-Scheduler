@@ -1,6 +1,6 @@
 '''
- - Look at day preferences
- - Generate schedules
+ - MAJOR BUG: ENGR 103 Lecture and PHYS 102 Lecture overlapped. Why?
+              MATH 262 Lecture also overlapped with ENGR 103 Lecture.
  - Generate visuals for schedules
  - Generate txt files for CRNs of schedules
 '''
@@ -221,17 +221,18 @@ def recursive_generator(schedule, current, leftover, prefs):
             check_val = False
         if prefs['LUNCH_HOUR'] >= c['TIMES'][0] and prefs['LUNCH_HOUR'] < c['TIMES'][1]:
             check_val = False
-        if check_val:
-            for s in schedule:
-                if c['DAYS'] == s['DAYS']:
+        #if check_val:
+        for s in schedule:
+            for x in range(len(c['DAYS'])):
+                if c['DAYS'][x] == s['DAYS'][x]:
                     if c['TIMES'][0] >= s['TIMES'][0] and c['TIMES'][0] <= s['TIMES'][1]:
                         check_val = False
                     elif c['TIMES'][1] >= s['TIMES'][0] and c['TIMES'][1] <= s['TIMES'][1]:
                         check_val = False
-        if check_val:
-            for x in range(len(prefs['DAYS'])):
-                if prefs['DAYS'][x] < c['DAYS'][x]:
-                    check_val = False
+        #if check_val:
+        for x in range(len(prefs['DAYS'])):
+            if prefs['DAYS'][x] < c['DAYS'][x]:
+                check_val = False
         if check_val:
             dupe = copy.deepcopy(schedule)
             dupe.append(c)
