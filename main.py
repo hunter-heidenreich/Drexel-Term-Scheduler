@@ -291,15 +291,27 @@ def print_as_block(schedule, to_file):
                 for time in range(time_start, time_end):
                     full_sched[d + 1][time] = course['SUBJECT'] + ' ' + course['COURSE'] + ' ' + course['SECTION']
     if to_file:
-        file = open('test.txt', 'a+')
-        file.write('SCHEDULE ID: ')
-        file.write(str(SCHED_ID))
-        file.write('\n')
+        filename = 'test'
+        sched_file = open(filename + '.txt', 'a+')
+        sched_file.write('SCHEDULE ID: ')
+        sched_file.write(str(SCHED_ID))
+        sched_file.write('\n')
         for x in range(len(days)):
-            file.write ("{0:^14} {1:^14} {2:^14} {3:^14} {4:^14} {5:^14}".format(full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
-            file.write('\n')
-        file.write('\n')
-        file.close()
+            sched_file.write ("{0:^14} {1:^14} {2:^14} {3:^14} {4:^14} {5:^14}".format(full_sched[0][x], full_sched[1][x], full_sched[2][x], full_sched[3][x], full_sched[4][x], full_sched[5][x]))
+            sched_file.write('\n')
+        sched_file.write('\n')
+        sched_file.close()
+
+        crn_file = open(filename + '-crn.txt', 'a+')
+        crn_file.write('SCHEDULE ID: ')
+        crn_file.write(str(SCHED_ID))
+        crn_file.write('\n')
+        for course in schedule:
+            crn_file.write(course['SUBJECT'] + ' ' + course['COURSE'] + ' ' + course['TYPE'] + ': ' + course['CRN'])
+            crn_file.write('\n')
+        crn_file.write('\n')
+        crn_file.close()
+
     else:
         print()
         for x in range(len(days)):
