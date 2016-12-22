@@ -4,7 +4,6 @@
  - Seems like a bug in not displaying all the classes? Not sure. Doesn't show up
    all the time.
  - Generate visuals for schedules
- - Generate txt files for CRNs of schedules
 '''
 
 import copy
@@ -12,6 +11,7 @@ from lxml import html
 import requests
 
 SCHED_ID = 0
+FILENAME = ''
 
 def load_subject(subject, subject_url):
     page = requests.get(subject_url)
@@ -220,14 +220,17 @@ def print_choices():
 
 def generate_schedules(subjects, schedule, preferences):
     global SCHED_ID
+    global FILENAME
     spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
     selection = []
     SCHED_ID = 0
+    FILENAME = input('Enter a filename for your schedule: ')
     for course in schedule:
         if len(subjects[course['SUBJECT']]['courses']) == 0:
             subjects[course['SUBJECT']]['courses'] = load_subject(course['SUBJECT'], spring2017 + subjects[course['SUBJECT']]['link'])
         selection.append(load_course(subjects[course['SUBJECT']]['courses'], course, preferences))
     recursive_generator([], selection.pop(), selection, preferences)
+    print('Schedule complete.')
 
 
 def recursive_generator(schedule, current, leftover, prefs):
@@ -267,6 +270,7 @@ def recursive_generator(schedule, current, leftover, prefs):
 
 def print_as_block(schedule, to_file):
     global SCHED_ID
+    global FILENAME
     days = []
     t = 800
     while t < 2200:
@@ -291,8 +295,7 @@ def print_as_block(schedule, to_file):
                 for time in range(time_start, time_end):
                     full_sched[d + 1][time] = course['SUBJECT'] + ' ' + course['COURSE'] + ' ' + course['SECTION']
     if to_file:
-        filename = 'test'
-        sched_file = open(filename + '.txt', 'a+')
+        sched_file = open(FILENAME + '.txt', 'a+')
         sched_file.write('SCHEDULE ID: ')
         sched_file.write(str(SCHED_ID))
         sched_file.write('\n')
@@ -302,7 +305,7 @@ def print_as_block(schedule, to_file):
         sched_file.write('\n')
         sched_file.close()
 
-        crn_file = open(filename + '-crn.txt', 'a+')
+        crn_file = open(FILENAME + '-crn.txt', 'a+')
         crn_file.write('SCHEDULE ID: ')
         crn_file.write(str(SCHED_ID))
         crn_file.write('\n')
@@ -311,7 +314,6 @@ def print_as_block(schedule, to_file):
             crn_file.write('\n')
         crn_file.write('\n')
         crn_file.close()
-
     else:
         print()
         for x in range(len(days)):
