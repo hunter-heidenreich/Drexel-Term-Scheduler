@@ -87,17 +87,18 @@ def course_to_dict(course):
 
 def format_days(day_string):
     days = [0, 0, 0, 0, 0]
-    for char in day_string:
-        if char == 'M':
-            days[0] = 1
-        elif char == 'T':
-            days[1] = 1
-        elif char == 'W':
-            days[2] = 1
-        elif char == 'R':
-            days[3] = 1
-        elif char == 'F':
-            days[4] = 1
+    if day_string != 'TBD':
+        for char in day_string:
+            if char == 'M':
+                days[0] = 1
+            elif char == 'T':
+                days[1] = 1
+            elif char == 'W':
+                days[2] = 1
+            elif char == 'R':
+                days[3] = 1
+            elif char == 'F':
+                days[4] = 1
     return days
 
 
@@ -119,6 +120,7 @@ def format_time(time):
             if n_time[1] >= 2400:
                 n_time[1] -= 1200
         else:
+            print(n_time[1])
             n_time[1] = int(n_time[1])
 
     return n_time
@@ -221,6 +223,7 @@ def print_choices():
 def generate_schedules(subjects, schedule, preferences):
     global SCHED_ID
     global FILENAME
+    winter2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDMyNToJHhmXlAaYXA0sQiEG1opmtoDgAb98cdpgAAAA%3D%3D1'
     spring2017 = 'https://duapp2.drexel.edu/webtms_du/app?component=subjectDetails&page=CollegesSubjects&service=direct&sp=ZH4sIAAAAAAAAAFvzloG1uIhBPjWlVC%2BlKLUiNUcvs6hErzw1qSS3WC8lsSRRLyS1KJcBAhiZGJh9GNgTk0tCMnNTSxhEfLISyxL1iwtz9EECxSWJuQXWPgwcJUAtzvkpQBVCEBU5iXnp%2BsElRZl56TB5l9Ti5EKGOgamioKCEgY2IwNDM2NToJHBBSBVCoGliUVAZQqGZrqG5gCfPyshpgAAAA%3D%3D'
     selection = []
     SCHED_ID = 0
@@ -333,6 +336,10 @@ if __name__ == "__main__":
         },
         'CS': {
             'link': '&sp=SCI&sp=SCS&sp=5',
+            'courses': []
+        },
+        'ECE': {
+            'link': '&sp=SE&sp=SECE&sp=6',
             'courses': []
         },
         'ENGL': {
