@@ -21,33 +21,35 @@ def load_subject(subject, subject_url):
     crns = tree.xpath('//tr[@class="even"]/td/p/a/text() | //tr[@class="odd"]/td/p/a/text()')
     capacity = tree.xpath('//tr[@class="even"]/td/p/attribute::title | //tr[@class="odd"]/td/p/attribute::title')
     courses = []
-    try:
-        if not (subject == 'BIO'):
-            for x in range(len(courselist)):
-                if x % 11 == 0:
-                    courses.append([])
-                elif x % 11 == 6:
-                    courselist[x] = crns[x // 11]
-                elif x % 11 == 9:
-                    courselist[x] = capacity[x // 11]
-                courses[len(courses) - 1].append(courselist[x])
-        else:
-            for x in range(446, 1073):
-                manip = x - 446
-                if manip % 11 == 0:
-                    courses.append([])
-                elif manip % 11 == 6:
-                    courselist[x] = crns[x // 11]
-                elif manip % 11 == 9:
-                    courselist[x] = capacity[x // 11]
-                courses[len(courses) - 1].append(courselist[x])
-
-        for i in range(len(courses)):
-            courses[i] = course_to_dict(courses[i])
-        return remove_full(courses)
-    except IndexError:
-        print('This subject is still being finalized for the selected term.')
-        return []
+    if not (subject == 'BIO'):
+        for x in range(len(courselist)):
+            if x % 11 == 0:
+                courses.append([])
+            elif x % 11 == 6:
+                courselist[x] = crns[x // 11]
+            elif x % 11 == 9:
+                courselist[x] = capacity[x // 11]
+            courses[len(courses) - 1].append(courselist[x])
+    else:
+        x = 0
+        row = 0
+        while x < len(courselist):
+            if courselist[x] == 'BIO':
+                if courselist[x + 1] == '141':
+                    for i in range(11):
+                        if i % 11 == 0:
+                            courses.append([])
+                        elif i % 11 == 6:
+                            courselist[x + i] = crns[row]
+                        elif i % 11 == 9:
+                            courselist[x + i] = capacity[row]
+                        courses[len(courses) - 1].append(courselist[x + i])
+                row += 1
+            x += 1
+    print(courses)
+    for i in range(len(courses)):
+        courses[i] = course_to_dict(courses[i])
+    return remove_full(courses)
 
 
 def load_course(subject, course, preferences):
@@ -120,7 +122,6 @@ def format_time(time):
             if n_time[1] >= 2400:
                 n_time[1] -= 1200
         else:
-            print(n_time[1])
             n_time[1] = int(n_time[1])
 
     return n_time
