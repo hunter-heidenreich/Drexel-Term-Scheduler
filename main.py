@@ -46,7 +46,6 @@ def load_subject(subject, subject_url):
                         courses[len(courses) - 1].append(courselist[x + i])
                 row += 1
             x += 1
-    print(courses)
     for i in range(len(courses)):
         courses[i] = course_to_dict(courses[i])
     return remove_full(courses)
@@ -57,11 +56,15 @@ def load_course(subject, course, preferences):
     for sub in subject:
         if sub['COURSE'] == course['COURSE']:
             if sub['TYPE'] == course['TYPE']:
-                try:
-                    if int(sub['SECTION']) < 300:
+                if course['SECTION'] != '0':
+                    if course['SECTION'] == sub['SECTION']:
                         restricted.append(sub)
-                except ValueError:
-                    restricted.append(sub)
+                else:
+                    try:
+                        if int(sub['SECTION']) < 300:
+                            restricted.append(sub)
+                    except ValueError:
+                        restricted.append(sub)
 
     return restricted
 
@@ -155,7 +158,8 @@ def add_course():
     course['SUBJECT'] = input('Enter subject: ')
     course['COURSE'] = input('Enter the course number: ')
     course['TYPE'] = input('Enter part of course (Lab, Lecture, etc.): ')
-    course['RESPONSE'] = input('Adding "' + course['SUBJECT'] + ' ' + course['COURSE'] + ' ' + course['TYPE'] + '". Correct? [Y/N]: ')
+    course['SECTION'] = input('Enter specific section (0 if none is desired): ')
+    course['RESPONSE'] = input('Adding "' + course['SUBJECT'] + ' ' + course['COURSE'] + ' ' + course['TYPE'] + ' ' + course['SECTION'] + '". Correct? [Y/N]: ')
     return course
 
 
@@ -353,6 +357,10 @@ if __name__ == "__main__":
         },
         'MATH': {
             'link': '&sp=SAS&sp=SMATH&sp=1',
+            'courses': []
+        },
+        'MUSC': {
+            'link': '&sp=SA&sp=SMUSC&sp=0',
             'courses': []
         },
         'PHYS': {
