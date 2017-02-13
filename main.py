@@ -37,7 +37,7 @@ def load_subject(subject, subject_url):
                         courses[len(courses) - 1].append(courselist[x + i])
                 row += 1
             x += 1
-    if subject == 'CHEM':
+    elif subject == 'CHEM':
         x = 0
         row = 0
         while x < len(courselist):
@@ -386,6 +386,10 @@ if __name__ == "__main__":
         },
         'MUSC': {
             'link': '&sp=SA&sp=SMUSC&sp=0',
+            'courses': []
+        },
+        'PHIL': {
+            'link': '&sp=SAS&sp=SPHIL&sp=1',
             'courses': []
         },
         'PHYS': {
