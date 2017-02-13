@@ -21,16 +21,7 @@ def load_subject(subject, subject_url):
     crns = tree.xpath('//tr[@class="even"]/td/p/a/text() | //tr[@class="odd"]/td/p/a/text()')
     capacity = tree.xpath('//tr[@class="even"]/td/p/attribute::title | //tr[@class="odd"]/td/p/attribute::title')
     courses = []
-    if not (subject == 'BIO'):
-        for x in range(len(courselist)):
-            if x % 11 == 0:
-                courses.append([])
-            elif x % 11 == 6:
-                courselist[x] = crns[x // 11]
-            elif x % 11 == 9:
-                courselist[x] = capacity[x // 11]
-            courses[len(courses) - 1].append(courselist[x])
-    else:
+    if subject == 'BIO':
         x = 0
         row = 0
         while x < len(courselist):
@@ -46,6 +37,31 @@ def load_subject(subject, subject_url):
                         courses[len(courses) - 1].append(courselist[x + i])
                 row += 1
             x += 1
+    if subject == 'CHEM':
+        x = 0
+        row = 0
+        while x < len(courselist):
+            if courselist[x] == 'CHEM':
+                if courselist[x + 1] == '102':
+                    for i in range(11):
+                        if i % 11 == 0:
+                            courses.append([])
+                        elif i % 11 == 6:
+                            courselist[x + i] = crns[row]
+                        elif i % 11 == 9:
+                            courselist[x + i] = capacity[row]
+                        courses[len(courses) - 1].append(courselist[x + i])
+                row += 1
+            x += 1
+    else:
+        for x in range(len(courselist)):
+            if x % 11 == 0:
+                courses.append([])
+            elif x % 11 == 6:
+                courselist[x] = crns[x // 11]
+            elif x % 11 == 9:
+                courselist[x] = capacity[x // 11]
+            courses[len(courses) - 1].append(courselist[x])
     for i in range(len(courses)):
         courses[i] = course_to_dict(courses[i])
     return remove_full(courses)
@@ -131,7 +147,6 @@ def format_time(time):
             n_time[0] += 20
         if n_time[1] % 100 != 0:
             n_time[1] += 20
-        print(n_time)
 
     return n_time
 
