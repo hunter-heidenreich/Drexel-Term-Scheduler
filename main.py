@@ -130,7 +130,7 @@ def format_time(time):
         if n_time[0] % 100 != 0:
             n_time[0] += 20
         if n_time[1] % 100 != 0:
-            n_time[1] += 20 
+            n_time[1] += 20
         print(n_time)
 
     return n_time
@@ -343,6 +343,10 @@ if __name__ == "__main__":
         },
         'BUSN': {
             'link': '&sp=SB&sp=SBUSN&sp=1',
+            'courses': []
+        },
+        'CHEM': {
+            'link': '&sp=SAS&sp=SCHEM&sp=1',
             'courses': []
         },
         'CS': {
