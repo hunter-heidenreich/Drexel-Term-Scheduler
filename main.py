@@ -127,6 +127,12 @@ def format_time(time):
         else:
             n_time[1] = int(n_time[1])
 
+        if n_time[0] % 100 != 0:
+            n_time[0] += 20
+        if n_time[1] % 100 != 0:
+            n_time[1] += 20 
+        print(n_time)
+
     return n_time
 
 
